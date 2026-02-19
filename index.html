@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Office Park Building — Façade Lighting Design Presentation</title>
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --card: #121318;
+      --ink: #eef1f5;
+      --muted: #9aa3b2;
+      --brand: #6fb1ff;
+      --brand-2: #8b5cf6;
+      --ring: rgba(111,177,255,.5);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% -10%, rgba(111,177,255,.15), transparent 60%),
+                  radial-gradient(1200px 800px at 80% -10%, rgba(139,92,246,.12), transparent 60%),
+                  var(--bg);
+      color:var(--ink);
+      overflow-x: hidden;
+    }
+    .wrap{max-width:1440px; margin:0 auto; padding:24px;}
+    
+    header{position:sticky; top:0; z-index:30; backdrop-filter:saturate(140%) blur(6px);}
+    .header-inner{
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 14px 24px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+    
+    .logo-area{display: flex; justify-content: flex-end; grid-column: 3;}
+    .logo-img{height: 42px; width: auto; filter: brightness(1.1);}
+    
+    .title-center{grid-column: 2; text-align: center;}
+    .title-center h1{margin:0; font-size: 20px; font-weight:800; letter-spacing: 0.5px;}
+    .title-center p{margin:4px 0 0; color:var(--muted); font-size:12px; font-weight: 600;}
+
+    .viewer{margin-top:22px; display:grid; gap:16px;}
+    .card{border-radius:22px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); overflow:hidden; box-shadow:0 18px 50px rgba(0,0,0,.35)}
+
+    .stage-card{display: grid; grid-template-columns: 1fr;}
+    @media(min-width:900px){ .stage-card{grid-template-columns: 1.6fr .4fr} }
+    
+    .stage{position:relative; width:100%; background:#0e1014; display: flex; align-items: center; justify-content: center; min-height: 550px; max-height: 85vh;}
+    .gallery img{width:100%; height:auto; max-height: 100%; object-fit: contain; margin: 0 auto;}
+
+    .nav-arrow{position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; background:rgba(0,0,0,0.5); color:#fff; display:grid; place-items:center; cursor:pointer; z-index:10; border:none; font-size: 24px;}
+    .nav-arrow.left{left:12px}
+    .nav-arrow.right{right:12px}
+
+    .sidebar-tools{padding:20px; display: flex; flex-direction: column; gap: 20px;}
+    .toolbar-section{display: flex; flex-direction: column; gap: 8px;}
+    .section-label{font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;}
+    
+    .btn{width: 100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:var(--ink); font-weight:600; font-size:13px; cursor:pointer; transition:.2s ease;}
+    .btn:hover{background: rgba(255,255,255,0.1); transform: translateX(2px);}
+    .btn.active{background: linear-gradient(135deg, var(--brand), var(--brand-2)); border: none;}
+    .btn.primary{background: linear-gradient(135deg, var(--brand), var(--brand-2)); border: none;}
+
+    body.is-fullscreen .wrap{ padding: 0; max-width: 100vw; }
+    body.is-fullscreen header, body.is-fullscreen .card:not(.stage-card){ display: none; }
+    body.is-fullscreen .stage-card{ grid-template-columns: 1fr; height: 100vh; border-radius: 0; }
+    body.is-fullscreen .sidebar-tools{ display: none; }
+    
+    .fs-controls { display: none; }
+    body.is-fullscreen .fs-controls { 
+      display: flex; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 100; gap: 12px; background: rgba(0,0,0,0.85); padding: 12px 24px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+    }
+
+    .thumbs{display:flex; gap:10px; flex-wrap:wrap; padding:14px; background:rgba(255,255,255,0.02)}
+    .thumb{width:120px; aspect-ratio:16/9; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); cursor:pointer; background:#000; padding:0;}
+    .thumb img{width:100%; height:100%; object-fit:contain; display:block;}
+    .thumb.active{box-shadow:0 0 0 2px var(--brand) inset}
+
+    .info-section{padding: 24px; margin-top: 16px;}
+    .info-section h3{margin: 0 0 12px; font-size: 16px; font-weight: 800;}
+
+    .fittings-grid { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; }
+    .fixture-card { width: 160px; text-align: center; cursor: pointer;}
+    .fixture-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; background: #000; border: 1px solid rgba(255,255,255,0.1); }
+    .fixture-card span { display: block; margin-top: 8px; font-size: 12px; color: var(--muted); font-weight: 600; }
+
+    /* Gap removed by reducing bottom padding from 60px to 10px */
+    .notice-section { 
+      padding: 24px 0 10px 0; 
+      margin-top: 16px; 
+      font-size: 13px; 
+      line-height: 1.6; 
+      color: #6a6a6a; 
+      text-align: left; 
+    }
+    .notice-section strong { 
+      color: #8a8a8a; 
+    }
+  </style>
+
+    <link rel="icon" type="image/png" href="Logo.png">   
+    <title>Home | Studio Design</title>
+
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="header-inner">
+        <div style="grid-column: 1;"></div>
+        <div class="title-center">
+          <h1>Office Park Building — Façade Lighting Concept Proposal</h1>
+          <p>Location: DUBAI, UAE</p>
+        </div>
+        <div class="logo-area">
+          <a href="https://www.fraterlighting.com/" target="_blank">
+            <img src="Frater.png" alt="Frater Logo" class="logo-img">
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="viewer">
+      <section class="card stage-card">
+        <div class="stage">
+          <div class="gallery">
+            <button class="nav-arrow left" onclick="prev()">‹</button>
+            <img id="main" src="A1.png" alt="Office Park Design" />
+            <button class="nav-arrow right" onclick="next()">›</button>
+          </div>
+          <div class="fs-controls">
+            <div style="display:flex; gap:8px;">
+              <button class="btn opt-btn" data-opt="01">Option 01</button>
+              <button class="btn opt-btn" data-opt="02">Option 02</button>
+              <button class="btn opt-btn" data-opt="03">Option 03</button>
+            </div>
+            <button class="btn primary fs-trigger">Back</button>
+          </div>
+        </div>
+
+        <aside class="sidebar-tools">
+          <div class="toolbar-section">
+            <div class="section-label">Design Concept</div>
+            <button class="btn opt-btn active" data-opt="01">Option 01</button>
+            <button class="btn opt-btn" data-opt="02">Option 02</button>
+            <button class="btn opt-btn" data-opt="03">Option 03</button>
+          </div>
+          <div class="toolbar-section">
+            <div class="section-label">System</div>
+            <button class="btn fs-trigger">Full Screen</button>
+            <button class="btn primary" onclick="window.print()">Export PDF</button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="card">
+        <div class="thumbs" id="thumbs"></div>
+      </section>
+
+      <section class="card info-section">
+        <h3>Notes & Future Additions</h3>
+        <ul style="font-size: 14px; color: var(--muted); line-height: 1.6;">
+            <li>Wattages: To be decided based on Lux Study.</li>
+            <li>CCT: Warm White (3000K) / Neutral White (4000K) options.</li>
+            <li>Control: DALI / DMX Dimming capability.</li>
+        </ul>
+      </section>
+
+      <section class="card info-section">
+        <h3>Fixtures Proposed</h3>
+        <div class="fittings-grid">
+          <div class="fixture-card" onclick="window.open('https://www.fraterlighting.com/nftb', '_blank')">
+            <img src="F1.png" alt="Neon Flex Top Bend">
+            <span>01- Neon Flex: Top Bend</span>
+          </div>
+          <div class="fixture-card" onclick="window.open('https://www.fraterlighting.com/nfsb', '_blank')">
+            <img src="F2.png" alt="Neon Flex Side Bend">
+            <span>02- Neon Flex: Side Bend</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="notice-section">
+        <strong>Notice regarding Project Representation:</strong> Frater Lighting Design Hub reserves the professional right to feature this design proposal and presentation within our digital archive and project design hub as a formal showcase of our architectural standards and technical capabilities. We remain committed to the highest standards of professional etiquette while presenting our lighting solutions to the public.
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const imagesByOption = { 
+      "01": ["A1.png", "A2.png", "A3.png"], 
+      "02": ["B1.png", "B2.png", "B3.png"], 
+      "03": ["C1.png", "C2.png", "C3.png"] 
+    };
+    const state = { currentOpt: "01", pageIndex: 0 };
+    const mainImg = document.getElementById('main');
+    const thumbsContainer = document.getElementById('thumbs');
+
+    function updateUI() {
+      const list = imagesByOption[state.currentOpt];
+      mainImg.src = list[state.pageIndex];
+      thumbsContainer.innerHTML = '';
+      list.forEach((src, i) => {
+        const btn = document.createElement('button');
+        btn.className = `thumb ${i === state.pageIndex ? 'active' : ''}`;
+        btn.onclick = () => { state.pageIndex = i; updateUI(); };
+        btn.innerHTML = `<img src="${src}">`;
+        thumbsContainer.appendChild(btn);
+      });
+      document.querySelectorAll('.opt-btn').forEach(b => b.classList.toggle('active', b.dataset.opt === state.currentOpt));
+    }
+
+    document.querySelectorAll('.opt-btn').forEach(btn => {
+      btn.onclick = () => { state.currentOpt = btn.dataset.opt; state.pageIndex = 0; updateUI(); };
+    });
+
+    function next() { state.pageIndex = (state.pageIndex + 1) % imagesByOption[state.currentOpt].length; updateUI(); }
+    function prev() { const len = imagesByOption[state.currentOpt].length; state.pageIndex = (state.pageIndex - 1 + len) % len; updateUI(); }
+
+    const fsTriggers = document.querySelectorAll('.fs-trigger');
+    fsTriggers.forEach(btn => {
+      btn.onclick = () => {
+        const isFS = document.body.classList.toggle('is-fullscreen');
+        fsTriggers.forEach(t => t.textContent = isFS ? "Back" : "Full Screen");
+        if (isFS && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+        else if (document.fullscreenElement) document.exitFullscreen();
+      };
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        document.body.classList.remove('is-fullscreen');
+        fsTriggers.forEach(t => t.textContent = "Full Screen");
+      }
+    });
+
+    updateUI();
+  </script>
+</body>
+</html>
